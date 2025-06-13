@@ -104,9 +104,9 @@ TOTP secrets can be used with any authenticator app.
 4. Add/login to devices from `http://<host>:5000/login`
 
 ## Test (local)
-1. Install necessary python requirements
+1. Run `pip install -r test-requirements.txt` to install necessary python requirements  
 2. Install docker
-3. Run `testing.py`
+3. Run `python3 testing.py`
    
 ### Service permission
 Service permission are by default granted to admin users while services are otherwise granted by adding a UserService instance connecting a User to a Service and verifying the connection based on the specific device cookies.  
