@@ -343,7 +343,7 @@ class UserTesting(unittest.TestCase):
         assert set(response.json.keys()) == set(["status code", "status", "data"]), f"json has invalid keys - instead got: {response.json.keys()}"
         assert response.json['status code'] == 200, f"this http call should work with '200' instead got: {response.json['status code']}"
         assert response.json['status'] == 'ok', f"this http call should work with 'ok' instead got: {response.json['status']}"
-        assert response.json['data'] == {'ServiceID': 1, 'UserID': 1, 'UserRole': 'admin', 'UserServiceToken': 'd43249ae-4bbd-4b7b-b5d9-2271078233fa'} , f"json data invalid - actually was: {response.json}"
+        assert response.json['data'] == {'UserRole': 'admin', 'UserServiceToken': 'd43249ae-4bbd-4b7b-b5d9-2271078233fa'} , f"json data invalid - actually was: {response.json}"
 
         # User 1 SERVICE CLOUD 
         headers = {"Authorization": "Bearer SERVICETOKENCLOUD"}
@@ -354,7 +354,7 @@ class UserTesting(unittest.TestCase):
         assert set(response.json.keys()) == set(["status code", "status", "data"]), f"json has invalid keys - instead got: {response.json.keys()}"
         assert response.json['status code'] == 200, f"this http call should work with '200' instead got: {response.json['status code']}"
         assert response.json['status'] == 'ok', f"this http call should work with 'ok' instead got: {response.json['status']}"
-        assert response.json['data'] == {'ServiceID': 2, 'UserID': 1, 'UserRole': 'admin', 'UserServiceToken': '852691c1-51c0-434a-8900-c73fabad6518'} , f"json data invalid - actually was: {response.json}"
+        assert response.json['data'] == {'UserRole': 'admin', 'UserServiceToken': '852691c1-51c0-434a-8900-c73fabad6518'} , f"json data invalid - actually was: {response.json}"
         
         # New user credentials 
         self.flask_app.delete_cookie("device_id")
@@ -371,7 +371,7 @@ class UserTesting(unittest.TestCase):
         assert set(response.json.keys()) == set(["status code", "status", "data"]), f"json has invalid keys - instead got: {response.json.keys()}"
         assert response.json['status code'] == 200, f"this http call should work with '200' instead got: {response.json['status code']}"
         assert response.json['status'] == 'ok', f"this http call should work with 'ok' instead got: {response.json['status']}"
-        assert response.json['data'] == {'ServiceID': 1, 'UserID': 2, 'UserRole': 'user', 'UserServiceToken': '992f81a8-3bd1-4402-818a-7a4d824a85cd'} , f"json data invalid - actually was: {response.json}"
+        assert response.json['data'] == {'UserRole': 'user', 'UserServiceToken': '992f81a8-3bd1-4402-818a-7a4d824a85cd'} , f"json data invalid - actually was: {response.json}"
 
 if __name__ == "__main__":
     unittest.main()
