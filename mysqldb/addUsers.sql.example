@@ -1,0 +1,2 @@
+CREATE USER 'FlaskAuth'@'%' IDENTIFIED BY '{STRONG PASSWORD}';
+GRANT 'ServiceAdmin' TO 'FlaskAuth'@'%';

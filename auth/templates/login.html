@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+
+    <script src="/static/detect_device.js"></script>
+
+</head>
+<body>
+    <h1>Login</h1>
+
+    <!--<form> onsubmit="return alert(Submit)">
+
+	<label for="device_code">Device name:</label><br>
+	<input type="text" id="device_name"><br><br>
+    -->
+	<label for="device_code">Email:</label><br>
+	<input type="text" id="email"><br><br>
+	<label for="device_code">Device registration code:</label><br>
+	<input type="text" id="device_code"><br><br>
+	<input type="button" id="submit" value="Add device">
+    <!--</form>-->
+
+    <script>
+	async function add_device() {
+		let device_name = ""//document.querySelector("#device_name").value
+		let email = document.querySelector("#email").value
+		let registration_code = document.querySelector("#device_code").value
+		let response = await fetch('/device/add',
+				{
+				method: 'POST',
+				body: JSON.stringify({
+					email:email,
+					device_registration_code:registration_code,
+                    deviceType: detectedDevice
+				}),
+				headers: {'Content-type': 'application/json; charset=UTF-8'}
+				}
+		)
+        if (response.ok) {
+            // alert(`Success response: ${response.status}!`)
+            // not just windows.location.reload() to try to make the browser avoid cache 
+            window.location.replace(window.location.href);
+        } else {
+            const data = await response.json();
+            alert(`Login failed with server response: ${data.error}!`)
+        }
+	}
+	
+	let submit_button = document.querySelector("#submit");
+	submit_button.addEventListener("click", () => add_device());
+
+    </script>
+</body>
+</html>

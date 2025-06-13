@@ -1,0 +1,22 @@
+version: '3'
+services:
+  reverse_proxy:
+    image: nginx:latest
+    ports:
+      - "5000:81"
+    volumes:
+      - ./reverse_proxy:/etc/nginx/conf.d
+    networks:
+      - home-server
+
+  authentication:
+    env_file: ".env"
+    build:
+      context: .
+      dockerfile: ./auth/Dockerfile
+    networks:
+      - home-server 
+
+networks:
+  home-server:
+    external: true
