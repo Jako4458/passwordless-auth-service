@@ -127,8 +127,8 @@ def verify_service(service):
         cursor.execute("update Device set LastLogin = %s where DeviceID = %s", (datetime.datetime.now(), device_id))
         cursor.execute("update UserService set LastLogin = %s where UserID = %s", (datetime.datetime.now(), user["UserID"]))
     
-    # Return valid response 
-    return response.make_verify_valid(user_service_token)
+    # Return valid response Only data the service needs to exclude ServiceID and UserID to actually keep user info from services
+    return response.make_verify_valid({"UserServiceToken": user_service_token["UserServiceToken"], "UserRole": user_service_token["UserRole"]})
 
 if __name__ == "__main__":
     # Propagate exceptions for easier debugging
