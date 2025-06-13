@@ -87,12 +87,18 @@ TOTP secrets can be used with any authenticator app.
 
 ### Getting Started
 
+## Reverse proxy
+1. Copy `reverse_proxy/server.example.config` to `reverse_proxy/server.config` and update domain
+
 ## Database setup (Mysql) (optional)
 1. Update `/mysqlbd/06-addUser.sql` with valid password for the user `FlaskAuth`. 
 2. Run `/mysqlbd/setupDatabase.sh` - To create the database `Auth_service`, with all the tables, and user `FlaskAuth` with access to
 
 ## Server
 1. Copy `.env.example` to `.env` and update values
+
+**Note**: The `.env.testing` file contains public testing keys (e.g., `FLASK_SECRET`, `TOPT_ENCRYPTION_KEY`) required for test validation. These are **not secure** and must **not** be used in production. Do not copy `.env.testing` into `.env` — generate fresh secrets for real deployments.
+   
 2. Run `docker-compose up --build`
 3. Use mysql or `admin.cli.py` to add Users, Services and UserServices 
 4. Add/login to devices from `http://<host>:5000/login`
