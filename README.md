@@ -12,7 +12,8 @@ Authentication and Authorization for services running on the same docker bridge 
 The user logs in via the open `/login` path, which internally calls `/device/add` and responds with authentication cookies. These cookies are HTTPS-only and domain-scoped. Once set, the client can make authenticated requests to services using the cookies.
 Service requests trigger internal calls to `/verify/<service>`, which confirms both the cookie's validity and the user's permission to access the specific service.
 
-![Auth diagram](https://github.com/user-attachments/assets/ff25884f-651e-48cf-8d41-9eb5dbf2c341)
+![Auth diagram](https://github.com/user-attachments/assets/dd1cf9bf-7727-478f-90ac-4cfe76dd09d3)
+
 
 **Security note:** The `/verify/<service>` endpoint is only accessible within the internal Docker network. The `/device/add` route always returns a generic `401 Unauthorized` on failure, regardless of whether the email or TOTP code was incorrect — preventing information disclosure about valid accounts.
 **Error handling:**
@@ -28,7 +29,7 @@ This design ensures public-facing services (which forward auth cookies to FlaskA
 ## Structure
 The database is structured as the shown Entity Relationship diagram, with `/verify/<service>` being successful with `200` for all users with a connection between to the Service in UserService.
 
-![Entity Relationship Diagram Auth-service (UML Notation)](https://github.com/user-attachments/assets/b7d94e33-6610-40fe-b214-22b51233d905)
+![Entity Relationship Diagram Auth-service (UML Notation)](https://github.com/user-attachments/assets/d4b76b38-42cb-4b0a-8829-6b889268c7a1)
 
 
 ## 🔐 Security Considerations
