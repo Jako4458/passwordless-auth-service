@@ -1,12 +1,27 @@
+from dotenv import load_dotenv
+
+if not load_dotenv(".env.admin_cli"):
+    print("ERROR LOADING TESTING ENVIRONMENT!")
+
 from utils.user_sql import *
 
 db_conn_data = {
-    "user": "testuser",
-    "password": "testpass",
-    "database": "testdb",
-    "host": "localhost",
-    "port" : 3307
+    "host":os.environ.get("DB_HOST"),
+    "user":os.environ.get("DB_USER"),
+    "port":int(os.environ.get("DB_PORT")),
+    "password":os.environ.get("DB_PASSWORD"),
+    "database":os.environ.get("MYSQL_DATABASE")
 }
+
+print(db_conn_data)
+
+## db_conn_data = {
+    ## "user": "testuser",
+    ## "password": "testpass",
+    ## "database": "testdb",
+    ## "host": "localhost",
+    ## "port" : 3307
+## }
 
 def list_all_items_by_input():
     action = ""

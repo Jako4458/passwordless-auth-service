@@ -15,6 +15,7 @@ try:
     import response
 except ModuleNotFoundError:
     import auth.response as response
+    print("response loaded")
 
 DEBUG = True
 
@@ -36,24 +37,23 @@ def get_accepted_cookies(request):
     return device_id, hmac_secret
 
 @app.route("/login")
-def login_device_html():
+def login_device_html_route():
     device_id, hmac_secret = get_accepted_cookies(request)
 
     if device_id is None or hmac_secret is None:
         return render_template("login.html")
 
     device_id, hmac_secret = request.cookies["device_id"], request.cookies["hmac_secret"]
-    with dbconnection() as cursor:
-        cursor.execute("select * from Device where DeviceKey = %s",(device_id,))
-        device = cursor.fetchone()
 
-    if (device is None) or not check_device_hmac(device_id, hmac_secret, device["HMACSignature"]): 
+    user = get_user_from_device_id(device_id, db_conn_data=app.db_conn_data)
+
+    if (user is None): 
         return render_template("login.html")
 
     return make_response(redirect(os.environ.get('login_redirect')))
 
 @app.route("/device/add", methods=["POST"])
-def add_device():
+def add_device_route():
     device_id, hmac_secret = get_accepted_cookies(request)
 
     # If device already logged in
@@ -67,13 +67,15 @@ def add_device():
     user_email, totp_input, device_type = request.json["email"], request.json["device_registration_code"], request.json["device_type"]
     user = get_user_from_email(user_email)
     
-    # If user not found waste avoid faster computation and return 401
+    print(totp_input)
+
+    # If user not found avoid faster computation and return 401
     if user is None:
         verify_user_TOTP_from_email("invalid_email", totp_input, db_conn_data=app.db_conn_data)
         return response.make_auth_error(401, "Invalid email or password")
 
     # Check valid totp
-    if verify_user_TOTP_from_email(user_email, totp_input, db_conn_data=app.db_conn_data):
+    if not verify_user_TOTP_from_email(user_email, totp_input, db_conn_data=app.db_conn_data):
         return response.make_auth_error(401, "Invalid email or password")
     
     # Generate and add new device
@@ -81,13 +83,13 @@ def add_device():
     add_device(device_id, user['UserID'], hmac_signature, device_type, app.db_conn_data)
     
     # Return valid response with set cookies 
-    response = response.make_auth_valid()
-    response.set_cookie('device_id', device_id, expires=datetime.datetime.now() + datetime.timedelta(days=int(os.environ.get("cookie_lifetime_days"))), domain=os.environ.get('cookie_domain'), secure=True, httponly=True, samesite='None')
-    response.set_cookie('hmac_secret', hmac_secret, expires=datetime.datetime.now() + datetime.timedelta(days=int(os.environ.get("cookie_lifetime_days"))), secure=True, domain=os.environ.get('cookie_domain'), httponly=True, samesite='None')
-    return response
+    res = response.make_auth_valid()
+    res.set_cookie('device_id', device_id, expires=datetime.datetime.now() + datetime.timedelta(days=int(os.environ.get("cookie_lifetime_days"))), domain=os.environ.get('cookie_domain'), secure=True, httponly=True, samesite='None')
+    res.set_cookie('hmac_secret', hmac_secret, expires=datetime.datetime.now() + datetime.timedelta(days=int(os.environ.get("cookie_lifetime_days"))), secure=True, domain=os.environ.get('cookie_domain'), httponly=True, samesite='None')
+    return res
 
 @app.route("/verify/<service>")
-def verify_service(service):
+def verify_service_route(service):
     # check authorization header is added 
     if (request.authorization is None):
         return response.make_auth_error(401, "Requiring service Authorization")

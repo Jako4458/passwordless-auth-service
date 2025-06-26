@@ -3,7 +3,7 @@ services:
   reverse_proxy:
     image: nginx:latest
     ports:
-      - "5000:81"
+      - "5000:82"
     volumes:
       - ./reverse_proxy:/etc/nginx/conf.d
     networks:

@@ -25,9 +25,9 @@ COPY /auth /app
 COPY /utils /app/utils
 
 # configure the container to run in an executed manner
-# ENTRYPOINT [ "python" ]
+ENTRYPOINT [ "python" ]
 
-# CMD ["app.py"]
-CMD ["gunicorn"  , "-b", "0.0.0.0:5000", "app:app"]
+CMD ["app.py"]
+# CMD ["gunicorn"  , "-b", "0.0.0.0:5000", "app:app"]
 
 # EXPOSE 5000
