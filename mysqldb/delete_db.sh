@@ -15,5 +15,6 @@ mysql $@ -e "DROP DATABASE Auth_service;"
 
 echo "Deleting user 'FlaskAuth'..."
 mysql $@ -e "DROP USER IF EXISTS 'FlaskAuth'@'172.18.0.%';"
-mysql $@ -e "DROP ROLE IF EXISTS 'ServiceAdmin'@'%';"
+mysql $@ -e "DROP USER IF EXISTS 'FlaskAuthAdminCLI'@'%';"
+mysql $@ -e "DROP ROLE IF EXISTS 'AuthAdmin'@'%';"
 

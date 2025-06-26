@@ -19,6 +19,21 @@ except ModuleNotFoundError:
     from hash import sha512_string, check_hash, check_device_hmac
     from dbconnection import dbconnection
 
+##############################
+
+import base64
+
+def is_valid_base32(str):
+    try:
+        # Base32 requires uppercase and may need padding with '='
+        base64.b32decode(val.upper(), casefold=True)
+        return True
+    except (base64.binascii.Error, ValueError):
+        return False
+
+##############################
+
+
 def user_input_db_con_data():
     db_conn_data = {}
     db_conn_data["host"] = input("host: ")
@@ -56,7 +71,7 @@ def add_user(userdata, db_conn_data=None):
 
     return TOTPSecret, TOTPSecretEncrypted
 
-def get_user_from_device_email(email, db_conn_data=None):
+def get_user_from_email(email, db_conn_data=None):
     with dbconnection(db_conn_data) as cursor:
         cursor.execute("select * from User where User.Email = %s", (email,))
         user = cursor.fetchone()
@@ -81,14 +96,19 @@ def verify_user_TOTP_from_email(user_email, totp_input, slide_window_sec=10, ver
     user = try_get_user_from_email(user_email, db_conn_data)
 
     f = Fernet(TOTP_encryption_key)
-    TOTP_secret = f.decrypt(user["TOTPSecretEncrypted"].encode()).decode()
+
+    # If user is none, use a random TOTPsecret for the constant time check 
+    if user is None:
+        TOTP_secret = pyotp.random_base32()
+    else: 
+        TOTP_secret = f.decrypt(user["TOTPSecretEncrypted"].encode()).decode()
     
     totp = pyotp.TOTP(TOTP_secret)
 
     if verification_time is None:
         verification_time = time.time() 
 
-    # Chech with a slind window allow for codes to work a little after expiring - python short circuiting should avoid unnecessary computations 
+    # Check with a slind window allow for codes to work a little after expiring - python short circuiting should avoid unnecessary computations 
     return totp.verify(totp_input, verification_time) or totp.verify(totp_input, verification_time - slide_window_sec)
 
 def verify_device(device_id, hmac_secret, db_conn_data=None):
