@@ -116,7 +116,7 @@ def verify_service_route(service):
     if user_service_token is None:
         if user["Role"] == "admin":
             # If admin does not yet have a userService -> add user access
-            user_service_token = add_user_service_token(user["UserID"], service_id, db_conn_data=app.db_conn_data)
+            user_service_token = add_user_service(user["UserID"], service_id, db_conn_data=app.db_conn_data)
         else:
             # If user does not have permissions to use service
             return response.make_auth_error(401, f"User does not have sufficient permissions")

@@ -19,20 +19,6 @@ except ModuleNotFoundError:
     from hash import sha512_string, check_hash, check_device_hmac
     from dbconnection import dbconnection
 
-##############################
-
-import base64
-
-def is_valid_base32(str):
-    try:
-        # Base32 requires uppercase and may need padding with '='
-        base64.b32decode(val.upper(), casefold=True)
-        return True
-    except (base64.binascii.Error, ValueError):
-        return False
-
-##############################
-
 
 def user_input_db_con_data():
     db_conn_data = {}
@@ -123,8 +109,10 @@ def verify_device(device_id, hmac_secret, db_conn_data=None):
     return check_device_hmac(device_id, hmac_secret, device["DeviceHMACSignature"])
 
 def add_service(service_name, db_conn_data=None):
-    service_data["name"] = service_name
-    service_data["token"] = str(uuid4())
+    service_data = {
+        "name": service_name,
+        "token": str(uuid4())
+    }
     service_data["hash_salt"], service_data["token_hash"] = sha512_string(service_data["token"])
 
     with dbconnection(db_conn_data) as cursor:
