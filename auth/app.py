@@ -11,6 +11,9 @@ import os
 from utils import dbconnection
 from utils.user_sql import *
 from utils.hash import create_new_device_hmac, check_device_hmac
+
+from scope_handling import scope_handlers
+
 try:
     import response
 except ModuleNotFoundError:
@@ -121,16 +124,24 @@ def verify_service_route(service):
             # If user does not have permissions to use service
             return response.make_auth_error(401, f"User does not have sufficient permissions")
 
-    # Add UserRole to response data
-    user_service_token["UserRole"] = user["Role"]
+    # Setup token for returning appropriate data
+    return_token = {"UserServiceToken": user_service_token["UserServiceToken"]}
+
+    # Add Scope handling - User data is only shared if the user has allowed a scope for it 
+    for scope in user_service_token["Scope"].split(","):
+        # Only handle read scopes in /verify
+        if scope.startswith("read:"):
+            return_token = scope_handlers[scope](return_token, user=user)
+    # user_service_token["UserRole"] = user["Role"]
     
     # Update device and service last login
     with dbconnection(app.db_conn_data) as cursor:
         cursor.execute("update Device set LastLogin = %s where DeviceID = %s", (datetime.datetime.now(), device_id))
         cursor.execute("update UserService set LastLogin = %s where UserID = %s", (datetime.datetime.now(), user["UserID"]))
+
     
     # Return valid response Only data the service needs to exclude ServiceID and UserID to actually keep user info from services
-    return response.make_verify_valid({"UserServiceToken": user_service_token["UserServiceToken"], "UserRole": user_service_token["UserRole"]})
+    return response.make_verify_valid(return_token)
 
 if __name__ == "__main__":
     # Propagate exceptions for easier debugging

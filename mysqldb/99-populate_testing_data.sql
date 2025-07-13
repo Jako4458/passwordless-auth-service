@@ -14,8 +14,8 @@ INSERT INTO Service (ServiceID, ServiceName, ServiceTokenHash, HashSalt, Creatio
 (2, 'CloudStorage', '74d555bde5a584549052c44a85e9f9200905f01181ef90b58823a2d805a0e431d7b6c59a19de49ba242ee3716a39d58aa9981fe69bc0edf6b2c173352f51e97e', '36206de129479fb757b54a2e46971e6c', NOW());
 
 -- Link Users to Services (UserService)
-INSERT INTO UserService (UserID, ServiceID, UserServiceTokenEncrypted, LastLogin) VALUES
-(1, 1, 'gAAAAABoRe3TyYxqA_bHwPMOSXTlrDPP3d5XSXLFow9Oyu3x-EzBIGsJyRlzmTnVZn3MW-JjjeOdcBapbH7xP3Xr2nwTdFYgmm0LuRjagu50F2va_LyfbkRM4q1kMBmz1rtn6gTka8AD', NOW()),
-(1, 2, 'gAAAAABoRe2uoYfhjENBspDJLbhckCQQxIf2Qbxah7gcWsk4vum0oz1XYI0FX9f6Jgt3Yw5cOfHFianoSCttHN6mE0AG3eCTv45Keu_VaUhMpZwHKlTrlyyXOpzFMjwrrH4EuW8NQ9sE', NOW()),
-(2, 1, 'gAAAAABoRe3bPfb0QUtNhUJhoVMO93olKoFmfckjX-0rubEIMcw_1ue_7U40AEk1cAKpE7XY9MC0MaRlsxmFB9xad5adL7ccQSu3Z3ODVWCKIAVcebP3SAdl_cr4WsCo6YA1bQQFAknq', NOW());
+INSERT INTO UserService (UserID, ServiceID, Scope, UserServiceTokenEncrypted, LastLogin) VALUES
+(1, 1, 'read:user-role,', 'gAAAAABoRe3TyYxqA_bHwPMOSXTlrDPP3d5XSXLFow9Oyu3x-EzBIGsJyRlzmTnVZn3MW-JjjeOdcBapbH7xP3Xr2nwTdFYgmm0LuRjagu50F2va_LyfbkRM4q1kMBmz1rtn6gTka8AD', NOW()),
+(1, 2, 'read:user-role,read:username,', 'gAAAAABoRe2uoYfhjENBspDJLbhckCQQxIf2Qbxah7gcWsk4vum0oz1XYI0FX9f6Jgt3Yw5cOfHFianoSCttHN6mE0AG3eCTv45Keu_VaUhMpZwHKlTrlyyXOpzFMjwrrH4EuW8NQ9sE', NOW()),
+(2, 1, 'read:email,', 'gAAAAABoRe3bPfb0QUtNhUJhoVMO93olKoFmfckjX-0rubEIMcw_1ue_7U40AEk1cAKpE7XY9MC0MaRlsxmFB9xad5adL7ccQSu3Z3ODVWCKIAVcebP3SAdl_cr4WsCo6YA1bQQFAknq', NOW());
 

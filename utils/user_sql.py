@@ -157,15 +157,16 @@ def delete_user_service_from_user_id_and_service_id(user_id, service_id, db_conn
 
 def get_user_service_token_from_device(device_id, service_name, db_conn_data=None):
     with dbconnection(db_conn_data) as cursor:
-        cursor.execute("select us.UserID, us.ServiceID, us.UserServiceTokenEncrypted from Device d join UserService us on d.UserID = us.UserID join Service s on us.ServiceID = s.ServiceID where d.DeviceID = %s and s.ServiceName = %s", (device_id, service_name))
+        cursor.execute("select us.* from Device d join UserService us on d.UserID = us.UserID join Service s on us.ServiceID = s.ServiceID where d.DeviceID = %s and s.ServiceName = %s", (device_id, service_name))
         user_service = cursor.fetchone()
     if user_service is None:
         return None
 
     f = Fernet(TOTP_encryption_key)
     user_service["UserServiceToken"] = f.decrypt(user_service["UserServiceTokenEncrypted"].encode()).decode()
+    del user_service["UserServiceTokenEncrypted"]
 
-    return {"UserID": user_service['UserID'], "ServiceID": user_service['ServiceID'],"UserServiceToken": user_service["UserServiceToken"]}
+    return user_service
 
 def add_device(device_id, user_id, hmac_signature, device_type, db_conn_data=None):
     with dbconnection(db_conn_data) as cursor: 
