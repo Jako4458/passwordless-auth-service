@@ -103,6 +103,9 @@ TOTP secrets can be used with any authenticator app.
 3. Use mysql or `admin.cli.py` to add Users, Services and UserServices 
 4. Add/login to devices from `http://<host>:5000/login`
 
+## Client
+Example and some SDK's for client implementation can be found in the [ClientImplementation Folder](https://github.com/Jako4458/passwordless-auth-service/tree/master/ClientImplementation)
+
 ## Test (local)
 1. Run `pip install -r test-requirements.txt` to install necessary python requirements  
 2. Install docker
