@@ -1,6 +1,7 @@
 CREATE TABLE UserService (
     UserID INT NOT NULL,
     ServiceID INT NOT NULL,
+    Scope varchar(255) NOT NULL DEFAULT '',
     UserServiceTokenEncrypted VARCHAR(255) NOT NULL,
     LastLogin DATETIME,
 

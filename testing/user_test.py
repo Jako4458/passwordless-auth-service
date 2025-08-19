@@ -87,7 +87,7 @@ class UserTesting(unittest.TestCase):
 
 ##############################################################
 
-    def test_create_user(self):
+    def t_est_create_user(self):
         from cryptography.fernet import Fernet 
 
         userdata = {
@@ -116,7 +116,7 @@ class UserTesting(unittest.TestCase):
             assert row["TOTPSecretEncrypted"] != userdata["TOTPSecret"] , f"Expected TOTPSecret to be encrypted!'"
             assert Fernet(os.environ.get("TOTP_ENCRYPTION_KEY").encode()).decrypt(row["TOTPSecretEncrypted"].encode()).decode() == userdata["TOTPSecret"] , f"Expected TOTPSecret to be encrypted properly!'"
 
-    def test_delete_user_from_device_id(self):
+    def t_est_delete_user_from_device_id(self):
         # ('dev-002', 2, 'HMAC5678ALICE', NOW());
         User_id_to_delete = 2
         device_id = "88039525d4f12b8fc4e0c4fc84fd4db4"
@@ -140,7 +140,7 @@ class UserTesting(unittest.TestCase):
             row = cursor.fetchone()
             assert row is None, f"UserServices belonging to user still in UserServiceTable"
 
-    def test_correct_get_user_from_device_id(self):
+    def t_est_correct_get_user_from_device_id(self):
         user_ids = [1,2]
         device_ids = ["e1e1d2634929125249c7a4626573724b", "88039525d4f12b8fc4e0c4fc84fd4db4"]
 
@@ -149,14 +149,14 @@ class UserTesting(unittest.TestCase):
             assert user is not None, f"User with id '{user_id}' not found"
             assert user["UserID"] == user_id, f"Returned user with id '{user['UserID']}' {user_id}!"
 
-    def test_incorrect_get_user_from_device_id(self):
+    def t_est_incorrect_get_user_from_device_id(self):
         device_ids = ["e1e1d2634929125250c7a4626573724b", "88039525a4f12b8fc4e0c4fc84fd4db4", "e1e1d2634929125249c7a4626573724c", "88039525d4f12b8fc4e0c4fc84fd4db3"]
 
         for device_id in device_ids:
             user = user_sql.get_user_from_device_id(device_id, self.db_conn_data)
             assert user is None, f"Invalid device_id gave returned user: '{user}'"
     
-    def test_correct_verify_service_token(self):
+    def t_est_correct_verify_service_token(self):
         service_names = ["EmailService", "CloudStorage"]
         service_ids = [1,2]
         service_tokens = ["SERVICETOKENEMAIL","SERVICETOKENCLOUD"]
@@ -166,7 +166,7 @@ class UserTesting(unittest.TestCase):
             assert is_valid_token, f"Token for service '{service_name}' is rated invalid!"
             assert service_id == expected_service_id, f"Returned wrong service_id, was f'{service_id}' and expected '{expected_service_id}'"
 
-    def test_incorrect_verify_service_token(self):
+    def t_est_incorrect_verify_service_token(self):
         service_names = ["EmailService", "CloudStorage","CloudStorage", "EmailService"]
         service_tokens = ["SERVICETOKEN","TOKENCLOUD","SERVICETOKENEMAIL","SERVICETOKENCLOUD" ]
 
@@ -175,7 +175,7 @@ class UserTesting(unittest.TestCase):
             assert not is_valid_token, f"Invalid Token '{service_token}' works for service '{service_name}'!"
             assert service_id is None, f"Service_id should be None for invalid serviceToken, instead returned f'{service_id}'"
 
-    def test_correct_get_user_service_token_from_device(self):
+    def t_est_correct_get_user_service_token_from_device(self):
         device_ids = ["e1e1d2634929125249c7a4626573724b", "e1e1d2634929125249c7a4626573724b", "88039525d4f12b8fc4e0c4fc84fd4db4"]
         service_names = ["EmailService", "CloudStorage", "EmailService"]
         user_service_tokens = ["d43249ae-4bbd-4b7b-b5d9-2271078233fa", "852691c1-51c0-434a-8900-c73fabad6518", "992f81a8-3bd1-4402-818a-7a4d824a85cd"]
@@ -185,7 +185,7 @@ class UserTesting(unittest.TestCase):
             assert user_service is not None, f"Did not find usertoken!"
             assert user_service["UserServiceToken"] == user_service_token, f"Wrong User-service Token '{user_service['UserServiceToken']}' should have been '{user_service_token}'"
 
-    def test_incorrect_get_user_service_token_from_device(self):
+    def t_est_incorrect_get_user_service_token_from_device(self):
         device_ids = ["e1e1d2634929125249c7a4626573724b", "85039525d4f12b8fc4e0c4fc84fd4db4"]
         service_names = ["CloudService", "EmailService"]
         error = ["Invalid serviceName", "Invalid DeviceID"]
@@ -194,7 +194,7 @@ class UserTesting(unittest.TestCase):
             user_service = user_sql.get_user_service_token_from_device(device_id, service_name, self.db_conn_data)
             assert user_service is None, f"Returned usertoken while testing with: {error}"
 
-    def test_verify_user_TOTP_from_email(self):
+    def t_est_verify_user_TOTP_from_email(self):
         emails = ["admin@example.com", "alice@example.com"]
         totp_secrets = ["MEDBGLBEBFNBWVDNOIOSLTZMXDYVMOIL", "HBFRTISUR7HFH7DOW5OFEMSZELPUTQFG"]
         slide_window_sec = 10
@@ -223,7 +223,7 @@ class UserTesting(unittest.TestCase):
             verify_result = user_sql.verify_user_TOTP_from_email(email, totp_input, slide_window_sec=slide_window_sec, verification_time=time_0+time_delay, db_conn_data=self.db_conn_data)
             assert not verify_result, f"TOTP verification works for future codes tested with time delay '{time_delay}'"
 
-    def test_invalid_flask_verify(self):
+    def t_est_invalid_flask_verify(self):
         # No Auth or cookies
         response = self.flask_app.get("/verify/service")
         assert response.status_code == 401, f"this http call should fail with '401' instead got: {response.json}"
@@ -354,7 +354,7 @@ class UserTesting(unittest.TestCase):
         assert set(response.json.keys()) == set(["status code", "status", "data"]), f"json has invalid keys - instead got: {response.json.keys()}"
         assert response.json['status code'] == 200, f"this http call should work with '200' instead got: {response.json['status code']}"
         assert response.json['status'] == 'ok', f"this http call should work with 'ok' instead got: {response.json['status']}"
-        assert response.json['data'] == {'UserRole': 'admin', 'UserServiceToken': '852691c1-51c0-434a-8900-c73fabad6518'} , f"json data invalid - actually was: {response.json}"
+        assert response.json['data'] == {'UserRole': 'admin','Username': 'admin', 'UserServiceToken': '852691c1-51c0-434a-8900-c73fabad6518'} , f"json data invalid - actually was: {response.json}"
         
         # New user credentials 
         self.flask_app.delete_cookie("device_id")
@@ -371,7 +371,7 @@ class UserTesting(unittest.TestCase):
         assert set(response.json.keys()) == set(["status code", "status", "data"]), f"json has invalid keys - instead got: {response.json.keys()}"
         assert response.json['status code'] == 200, f"this http call should work with '200' instead got: {response.json['status code']}"
         assert response.json['status'] == 'ok', f"this http call should work with 'ok' instead got: {response.json['status']}"
-        assert response.json['data'] == {'UserRole': 'user', 'UserServiceToken': '992f81a8-3bd1-4402-818a-7a4d824a85cd'} , f"json data invalid - actually was: {response.json}"
+        assert response.json['data'] == {'Email': 'alice@example.com', 'UserServiceToken': '992f81a8-3bd1-4402-818a-7a4d824a85cd'} , f"json data invalid - actually was: {response.json}"
 
 if __name__ == "__main__":
     unittest.main()

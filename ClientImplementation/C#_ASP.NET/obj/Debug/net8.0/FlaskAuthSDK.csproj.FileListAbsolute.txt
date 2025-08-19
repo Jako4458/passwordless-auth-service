@@ -1,0 +1,12 @@
+C:\Users\jakob\Desktop\Programming\C#\FlaskAuthSDK\bin\Debug\net8.0\FlaskAuthSDK.deps.json
+C:\Users\jakob\Desktop\Programming\C#\FlaskAuthSDK\bin\Debug\net8.0\FlaskAuthSDK.dll
+C:\Users\jakob\Desktop\Programming\C#\FlaskAuthSDK\bin\Debug\net8.0\FlaskAuthSDK.pdb
+C:\Users\jakob\Desktop\Programming\C#\FlaskAuthSDK\obj\Debug\net8.0\FlaskAuthSDK.csproj.AssemblyReference.cache
+C:\Users\jakob\Desktop\Programming\C#\FlaskAuthSDK\obj\Debug\net8.0\FlaskAuthSDK.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\jakob\Desktop\Programming\C#\FlaskAuthSDK\obj\Debug\net8.0\FlaskAuthSDK.AssemblyInfoInputs.cache
+C:\Users\jakob\Desktop\Programming\C#\FlaskAuthSDK\obj\Debug\net8.0\FlaskAuthSDK.AssemblyInfo.cs
+C:\Users\jakob\Desktop\Programming\C#\FlaskAuthSDK\obj\Debug\net8.0\FlaskAuthSDK.csproj.CoreCompileInputs.cache
+C:\Users\jakob\Desktop\Programming\C#\FlaskAuthSDK\obj\Debug\net8.0\FlaskAuthSDK.dll
+C:\Users\jakob\Desktop\Programming\C#\FlaskAuthSDK\obj\Debug\net8.0\refint\FlaskAuthSDK.dll
+C:\Users\jakob\Desktop\Programming\C#\FlaskAuthSDK\obj\Debug\net8.0\FlaskAuthSDK.pdb
+C:\Users\jakob\Desktop\Programming\C#\FlaskAuthSDK\obj\Debug\net8.0\ref\FlaskAuthSDK.dll
