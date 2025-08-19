@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+	<PropertyGroup>
+		<Version>1.2.0</Version>
+		<!-- NuGet/package version -->
+		<AssemblyVersion>1.2.0.0</AssemblyVersion>
+		<!-- Binary version -->
+		<FileVersion>1.2.0.0</FileVersion>
+		<!-- Windows file metadata -->
+		<InformationalVersion>1.2.0-beta</InformationalVersion>
+		<!-- Optional label -->
+	</PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Abstractions" Version="2.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.6" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+</Project>
